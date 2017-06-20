@@ -1,7 +1,6 @@
 package com.mplatform.domain;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
 
 public class LeaveInfo {
 	private Integer leaveId;

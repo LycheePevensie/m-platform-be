@@ -16,5 +16,9 @@ public interface LeaveService {
 	boolean confirmLeave(Integer id);
 
 	boolean rejectLeave(Integer id);
+
+	List<LeaveInfo> selectLeaveByDate(String date, Integer page, Integer limit);
+
+	Integer countByDate(String date);
 	
 }

@@ -1,7 +1,6 @@
 package com.mplatform.service.impl;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +64,18 @@ public class LeaveServiceImpl implements LeaveService {
 			return true;
 		else
 			return false;
+	}
+
+	@Override
+	public List<LeaveInfo> selectLeaveByDate(String date,Integer page, Integer limit) {
+		int start = (page-1)*limit;
+		return leaveMapper.selectLeaveByDate(date,start,limit);
+	}
+
+	@Override
+	public Integer countByDate(String date) {
+		
+		return leaveMapper.countLeaveByDate(date);
 	}
 
 	// @Override

@@ -31,4 +31,10 @@ public interface LeaveMapper {
 
 	@Update("UPDATE mp_leaveLog SET leaveStatus=2 WHERE leaveId=#{id}")
 	int rejectLeave(@Param("id") Integer id);
+	
+	@Select("SELECT m.* ,n.trueName AS userName,p.trueName AS managerName FROM (mp_leaveLog m LEFT JOIN mp_user n ON m.leaveUser = n.userId )LEFT JOIN mp_user p ON m.leaveManager = p.userId WHERE DATE(m.startTime)=#{date} LIMIT #{start},#{limit}")
+	List<LeaveInfo> selectLeaveByDate(@Param("date") String date, @Param("start") int start, @Param("limit") Integer limit);
+	
+	@Select("SELECT COUNT(*) FROM mp_leaveLog m WHERE DATE(m.startTime)=#{date}")
+	Integer countLeaveByDate(@Param("date") String date);
 }

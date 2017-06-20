@@ -71,17 +71,33 @@ public class LeaveController {
 		if(!result) return "error";
 		else return "success";
 	}
-//	
-//	@RequestMapping(value="/search",method = RequestMethod.POST)
-//	public List<LeaveInfo> searchLeave(@RequestBody String body,HttpServletRequest request,HttpServletResponse response)throws JSONException{
-//		Integer page = Integer.parseInt(request.getParameter("_page").toString());
-//		Integer limit = Integer.parseInt(request.getParameter("_limit").toString());
-//		JSONObject jo=new JSONObject(body);
-//		String searchWay = jo.get("searchWay").toString();
-//		String userCondition = jo.get("userCondition").toString();
+	
+	@RequestMapping(value="/search",method = RequestMethod.POST)
+	public List<LeaveInfo> searchLeave(@RequestBody String body,HttpServletRequest request,HttpServletResponse response)throws JSONException{
+		Integer page = Integer.parseInt(request.getParameter("_page").toString());
+		Integer limit = Integer.parseInt(request.getParameter("_limit").toString());
+		JSONObject jo=new JSONObject(body);
+		String searchWay = jo.get("SearchWay").toString();
+		if(searchWay=="date"||searchWay.equals("date")){
+			String dateTemp = jo.get("SearchDate").toString();
+			System.out.println(dateTemp);
+			String date = dateTemp.substring(0, 10);
+			//Timestamp ts = DateUtil.str2timestamp(date);
+			Integer count = leaveService.countByDate(date);
+			response.setHeader("x-total-count", count.toString());
+			return leaveService.selectLeaveByDate(date,page,limit);
+		}
+		else if(searchWay=="month"||searchWay.equals("month")){
+			return null;
+		}
+		else if(searchWay=="period"||searchWay.equals("period")){
+			return null;
+		}
+		else return null;
+		//String userCondition = jo.get("userCondition").toString();
 //		Integer count = leaveService.searchCount(searchWay,userCondition);
 //		response.setHeader("x-total-count", count.toString());
 //		return leaveService.searchLeave(page,limit,searchWay,userCondition); 
-//	}	
+	}	
 	
 }
