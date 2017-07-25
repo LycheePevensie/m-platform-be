@@ -25,7 +25,7 @@ public class ReportController {
 	private ReportService reportService;
 
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
-	public String check(@RequestBody String body) throws JSONException {
+	public String report(@RequestBody String body) throws JSONException {
 		JSONObject jo = new JSONObject(body);
 		Integer reporter = Integer.parseInt(jo.get("reporter").toString());
 		String readers = jo.get("readers").toString();
@@ -58,7 +58,7 @@ public class ReportController {
 		if (!result)
 			return "error";
 		else
-			return "success";
+			return "true";
 	}
 
 	@RequestMapping(value = "/select", method = RequestMethod.GET)

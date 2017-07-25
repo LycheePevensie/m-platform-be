@@ -29,9 +29,9 @@ public class LeaveServiceImpl implements LeaveService {
 	}
 
 	@Override
-	public List<LeaveInfo> selectLeave(Integer page, Integer limit) {
+	public List<LeaveInfo> selectLeave(Integer page, Integer limit, Integer userId) {
 		int start = (page - 1) * limit;
-		List<LeaveInfo> list = leaveMapper.selectLeave(start, limit);
+		List<LeaveInfo> list = leaveMapper.selectLeave(start, limit, userId);
 		for (LeaveInfo info : list) {
 			String startT = info.getStartTime().toString();
 			String endT = info.getEndTime().toString();
@@ -42,8 +42,8 @@ public class LeaveServiceImpl implements LeaveService {
 	}
 
 	@Override
-	public Integer leaveCount() {
-		return leaveMapper.leaveCount();
+	public Integer leaveCount(Integer userId) {
+		return leaveMapper.leaveCount(userId);
 	}
 
 	@Override
@@ -69,13 +69,56 @@ public class LeaveServiceImpl implements LeaveService {
 	@Override
 	public List<LeaveInfo> selectLeaveByDate(String date,Integer page, Integer limit) {
 		int start = (page-1)*limit;
-		return leaveMapper.selectLeaveByDate(date,start,limit);
+		List<LeaveInfo> list = leaveMapper.selectLeaveByDate(date,start,limit);
+		for (LeaveInfo info : list) {
+			String startT = info.getStartTime().toString();
+			String endT = info.getEndTime().toString();
+			info.setLeaveTime(
+					startT.substring(0, startT.length() - 5) + " 至 " + endT.substring(0, startT.length() - 5));
+		}
+		return list;
 	}
 
 	@Override
 	public Integer countByDate(String date) {
 		
 		return leaveMapper.countLeaveByDate(date);
+	}
+
+	@Override
+	public Integer countByMonth(String month) {
+		return leaveMapper.countLeaveByMonth(month);
+	}
+
+	@Override
+	public List<LeaveInfo> selectLeaveByMonth(String month, Integer page, Integer limit) {
+		int start = (page-1)*limit;
+		List<LeaveInfo> list = leaveMapper.selectLeaveByMonth(month,start,limit);
+		for (LeaveInfo info : list) {
+			String startT = info.getStartTime().toString();
+			String endT = info.getEndTime().toString();
+			info.setLeaveTime(
+					startT.substring(0, startT.length() - 5) + " 至 " + endT.substring(0, startT.length() - 5));
+		}
+		return list;	
+	}
+
+	@Override
+	public Integer countByPeriod(String start, String end) {
+		return leaveMapper.countLeaveByPeriod(start,end);
+	}
+
+	@Override
+	public List<LeaveInfo> selectLeaveByPeriod(String selectStart, String selectEnd, Integer page, Integer limit) {
+		int start = (page-1)*limit;
+		List<LeaveInfo> list = leaveMapper.selectLeaveByPeriod(selectStart,selectEnd,start,limit);
+		for (LeaveInfo info : list) {
+			String startT = info.getStartTime().toString();
+			String endT = info.getEndTime().toString();
+			info.setLeaveTime(
+					startT.substring(0, startT.length() - 5) + " 至 " + endT.substring(0, startT.length() - 5));
+		}
+		return list;
 	}
 
 	// @Override

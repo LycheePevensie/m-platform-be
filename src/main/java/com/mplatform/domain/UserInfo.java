@@ -1,7 +1,6 @@
 package com.mplatform.domain;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
 
 public class UserInfo {
 	private Integer userId;
@@ -16,8 +15,11 @@ public class UserInfo {
 	private Integer deepID;
 	private Integer sex;
 	private String department;
+	private String departName;
 	private String userJob;
 	private String userMail;
+	private Integer companyId;
+	
 	public Integer getUserId() {
 		return userId;
 	}
@@ -91,6 +93,12 @@ public class UserInfo {
 	public void setDepartment(String department) {
 		this.department = department;
 	}
+	public String getDepartName() {
+		return departName;
+	}
+	public void setDepartName(String departName) {
+		this.departName = departName;
+	}
 	public String getUserJob() {
 		return userJob;
 	}
@@ -103,12 +111,20 @@ public class UserInfo {
 	public void setUserMail(String userMail) {
 		this.userMail = userMail;
 	}
+	
+	public Integer getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(Integer companyId) {
+		this.companyId = companyId;
+	}
 	@Override
 	public String toString() {
-		return "UserInfo [userId=" + userId + ", userPwd=" + userPwd + ", userName=" + userName
-				+ ", trueName=" + trueName + ", userTel=" + userTel + ", userInfo=" + userInfo
-				+ ", userFlag=" + userFlag + ", registTime=" + registTime + ", userImage=" + userImage
-				+ ", deepID=" + deepID + "]";
+		return "UserInfo [userId=" + userId + ", userPwd=" + userPwd + ", userName=" + userName + ", trueName="
+				+ trueName + ", userTel=" + userTel + ", userInfo=" + userInfo + ", userFlag=" + userFlag
+				+ ", registTime=" + registTime + ", userImage=" + userImage + ", deepID=" + deepID + ", sex=" + sex
+				+ ", department=" + department + ", departName=" + departName + ", userJob=" + userJob + ", userMail="
+				+ userMail + ", companyId=" + companyId + "]";
 	}
 	
 }

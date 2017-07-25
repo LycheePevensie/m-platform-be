@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mplatform.domain.LeaveInfo;
+import com.mplatform.domain.UserInfo;
 import com.mplatform.service.LeaveService;
 import com.mplatform.util.DateUtil;
 
@@ -25,7 +26,7 @@ public class LeaveController {
 	private LeaveService leaveService;
 	
 	@RequestMapping(value="/new",method = RequestMethod.POST)
-	public String check(@RequestBody String body)throws JSONException {
+	public String leave(@RequestBody String body)throws JSONException {
 		JSONObject jo=new JSONObject(body);
 		Integer leaveUser = Integer.parseInt(jo.get("leaveUser").toString());
 		Integer leaveManager = Integer.parseInt(jo.get("leaveManager").toString());
@@ -44,16 +45,17 @@ public class LeaveController {
 		
 		boolean result = leaveService.insertLeave(leaveUser,leaveManager,startTime,endTime,leaveType,leaveReason,leaveTips);
 		if(!result) return "error";
-		else return "success";
+		else return "true";
 	}
 	
 	@RequestMapping(value="/select",method = RequestMethod.GET)
 	public List<LeaveInfo> selectLeave(HttpServletRequest request,HttpServletResponse response){
+		UserInfo user = (UserInfo) request.getSession().getAttribute("userinfo");
 		Integer page = Integer.parseInt(request.getParameter("_page").toString());
 		Integer limit = Integer.parseInt(request.getParameter("_limit").toString());
-		Integer count = leaveService.leaveCount();
+		Integer count = leaveService.leaveCount(user.getUserId());
 		response.setHeader("x-total-count", count.toString());
-		return leaveService.selectLeave(page,limit);
+		return leaveService.selectLeave(page,limit,user.getUserId());
 	}
 	
 	@RequestMapping(value = "/confirm",method = RequestMethod.GET)
@@ -61,7 +63,7 @@ public class LeaveController {
 		Integer id = Integer.parseInt(request.getParameter("id").toString());
 		boolean result = leaveService.confirmLeave(id);
 		if(!result) return "error";
-		else return "success";
+		else return "true";
 	}
 	
 	@RequestMapping(value = "/reject",method = RequestMethod.GET)
@@ -69,7 +71,7 @@ public class LeaveController {
 		Integer id = Integer.parseInt(request.getParameter("id").toString());
 		boolean result = leaveService.rejectLeave(id);
 		if(!result) return "error";
-		else return "success";
+		else return "true";
 	}
 	
 	@RequestMapping(value="/search",method = RequestMethod.POST)
@@ -88,10 +90,24 @@ public class LeaveController {
 			return leaveService.selectLeaveByDate(date,page,limit);
 		}
 		else if(searchWay=="month"||searchWay.equals("month")){
-			return null;
+			String monthTemp = jo.get("SearchMonth").toString();
+			System.out.println(monthTemp);
+			String month = monthTemp.substring(5, 7);
+			//Timestamp ts = DateUtil.str2timestamp(date);
+			Integer count = leaveService.countByMonth(month);
+			response.setHeader("x-total-count", count.toString());
+			return leaveService.selectLeaveByMonth(month,page,limit);
 		}
 		else if(searchWay=="period"||searchWay.equals("period")){
-			return null;
+			String searchPeriod = jo.get("SearchPeriod").toString();
+			//time格式处理
+			String startTemp = searchPeriod.split(",")[0];
+			String endTemp = searchPeriod.split(",")[1];
+			String start = startTemp.substring(2, 12);
+			String end = endTemp.substring(1, 11);
+			Integer count = leaveService.countByPeriod(start,end);
+			response.setHeader("x-total-count", count.toString());
+			return leaveService.selectLeaveByPeriod(start,end,page,limit);
 		}
 		else return null;
 		//String userCondition = jo.get("userCondition").toString();

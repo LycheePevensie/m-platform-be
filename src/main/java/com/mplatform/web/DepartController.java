@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mplatform.domain.DepartInfo;
+import com.mplatform.domain.UserInfo;
 import com.mplatform.service.DepartService;
 import com.mplatform.util.DateUtil;
 
@@ -25,10 +26,14 @@ public class DepartController {
 	private DepartService departService;
 
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
-	public String check(@RequestBody String body) throws JSONException {
+	public String depart(@RequestBody String body, HttpServletRequest request) throws JSONException {
+		UserInfo user = (UserInfo) request.getSession().getAttribute("userinfo");
+		if (user == null)
+			return null;
+		Integer companyId = user.getCompanyId();
 		JSONObject jo = new JSONObject(body);
 		Integer departId;
-		if(jo.has("departId"))
+		if (jo.has("departId"))
 			departId = Integer.parseInt(jo.get("departId").toString());
 		else
 			departId = null;
@@ -49,20 +54,23 @@ public class DepartController {
 		Time departLeaveS = DateUtil.str2time(leaveSTemp);
 		Time departLeaveE = DateUtil.str2time(leaveETemp);
 		boolean result = departService.insertDepart(departId, department, departLeader, departCheckS, departCheckE,
-				departLeaveS, departLeaveE);
+				departLeaveS, departLeaveE, companyId);
 		if (!result)
 			return "error";
 		else
-			return "success";
+			return "true";
 	}
 
 	@RequestMapping(value = "/select", method = RequestMethod.GET)
 	public List<DepartInfo> selectDepart(HttpServletRequest request, HttpServletResponse response) {
+		UserInfo user = (UserInfo) request.getSession().getAttribute("userinfo");
+		if (user == null)
+			return null;
 		Integer page = Integer.parseInt(request.getParameter("_page").toString());
 		Integer limit = Integer.parseInt(request.getParameter("_limit").toString());
-		Integer count = departService.departCount();
+		Integer count = departService.departCount(user.getCompanyId());
 		response.setHeader("x-total-count", count.toString());
-		return departService.selectDepart(page, limit);
+		return departService.selectDepart(page, limit, user.getCompanyId());
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
@@ -70,9 +78,16 @@ public class DepartController {
 		Integer id = Integer.parseInt(request.getParameter("id"));
 		int result = departService.deleteDepart(id);
 		if (result == 1)
-			return "success";
+			return "true";
 		else
 			return "error";
 	}
 
+	@RequestMapping(value = "/alldepart", method = RequestMethod.GET)
+	public List<DepartInfo> allDepart(HttpServletRequest request) {
+		UserInfo user = (UserInfo) request.getSession().getAttribute("userinfo");
+		if (user == null)
+			return null;
+		return departService.allDepart(user.getCompanyId());
+	}
 }

@@ -25,7 +25,7 @@ public class TaskController {
 	private TaskService taskService;
 
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
-	public String check(@RequestBody String body) throws JSONException {
+	public String task(@RequestBody String body) throws JSONException {
 		JSONObject jo = new JSONObject(body);
 		String taskName = jo.get("taskName").toString();
 		Integer taskManager = Integer.parseInt(jo.get("taskManager").toString());
@@ -44,7 +44,7 @@ public class TaskController {
 		if (!result)
 			return "error";
 		else
-			return "success";
+			return "true";
 	}
 
 	@RequestMapping(value = "/select", method = RequestMethod.GET)

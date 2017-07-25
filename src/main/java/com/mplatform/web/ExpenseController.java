@@ -25,7 +25,7 @@ public class ExpenseController {
 	private ExpenseService expenseService;
 
 	@RequestMapping(value = "/new", method = RequestMethod.POST)
-	public String check(@RequestBody String body) throws JSONException {
+	public String expense(@RequestBody String body) throws JSONException {
 		JSONObject jo = new JSONObject(body);
 		String expenseName = jo.get("expenseName").toString();
 		Integer expenseUser = Integer.parseInt(jo.get("expenseUser").toString());
@@ -43,7 +43,7 @@ public class ExpenseController {
 		if (!result)
 			return "error";
 		else
-			return "success";
+			return "true";
 	}
 
 	@RequestMapping(value = "/select", method = RequestMethod.GET)
@@ -60,7 +60,7 @@ public class ExpenseController {
 		Integer id = Integer.parseInt(request.getParameter("id").toString());
 		boolean result = expenseService.confirmExpense(id);
 		if(!result) return "error";
-		else return "success";
+		else return "true";
 	}
 	
 	@RequestMapping(value = "/reject",method = RequestMethod.GET)
@@ -68,7 +68,7 @@ public class ExpenseController {
 		Integer id = Integer.parseInt(request.getParameter("id").toString());
 		boolean result = expenseService.rejectExpense(id);
 		if(!result) return "error";
-		else return "success";
+		else return "true";
 	}
 	//
 	// @RequestMapping(value="/search",method = RequestMethod.POST)

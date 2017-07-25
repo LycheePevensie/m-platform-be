@@ -1,5 +1,6 @@
 package com.mplatform.domain;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 
 public class DepartInfo {
@@ -8,10 +9,10 @@ public class DepartInfo {
 	private String department;
 	private String departLeader;
 	private String departLeaderName;
-	private Timestamp departCheckS;
-	private Timestamp departCheckE;
-	private Timestamp departLeaveS;
-	private Timestamp departLeaveE;
+	private Time departCheckS;
+	private Time departCheckE;
+	private Time departLeaveS;
+	private Time departLeaveE;
 	private String departCheck;
 	private String departLeave;
 	
@@ -39,31 +40,32 @@ public class DepartInfo {
 	public void setDepartLeaderName(String departLeaderName) {
 		this.departLeaderName = departLeaderName;
 	}
-	public Timestamp getDepartCheckS() {
+
+	
+	public Time getDepartCheckS() {
 		return departCheckS;
 	}
-	public void setDepartCheckS(Timestamp departCheckS) {
+	public void setDepartCheckS(Time departCheckS) {
 		this.departCheckS = departCheckS;
 	}
-	public Timestamp getDepartCheckE() {
+	public Time getDepartCheckE() {
 		return departCheckE;
 	}
-	public void setDepartCheckE(Timestamp departCheckE) {
+	public void setDepartCheckE(Time departCheckE) {
 		this.departCheckE = departCheckE;
 	}
-	public Timestamp getDepartLeaveS() {
+	public Time getDepartLeaveS() {
 		return departLeaveS;
 	}
-	public void setDepartLeaveS(Timestamp departLeaveS) {
+	public void setDepartLeaveS(Time departLeaveS) {
 		this.departLeaveS = departLeaveS;
 	}
-	public Timestamp getDepartLeaveE() {
+	public Time getDepartLeaveE() {
 		return departLeaveE;
 	}
-	public void setDepartLeaveE(Timestamp departLeaveE) {
+	public void setDepartLeaveE(Time departLeaveE) {
 		this.departLeaveE = departLeaveE;
 	}
-	
 	public String getDepartCheck() {
 		return departCheck;
 	}
